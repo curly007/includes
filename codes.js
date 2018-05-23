@@ -2,6 +2,7 @@ var codes = {
 	input: "", // button sequence that was pressed, will be cleared automatically after no input for 2 seconds
 	code_list: [], // list of codes to check, elements are "code" for the code that gets entered and "fn" for the function to be executes
 	timer: setTimeout('codes.clear_input()', 2000), // timer ID for the current timer
+	debug_mode: false, // if true will output debug into to the console
 
 	/*
 	function onkeydown
@@ -10,11 +11,16 @@ var codes = {
 		e:	Event object passed from the onkeydown system event
 	*/
 	onkeydown: function(e) {
-		//window.status = e ? e.keyCode : event.keyCode; // for debugging
-
 		clearTimeout(codes.timer); // cancel timer to clear current input as a button was pressed
 
-		codes.input += e ? e.keyCode : event.keyCode;
+		var currKey = e ? e.keyCode : event.keyCode;
+		codes.input += currKey;
+
+		if (codes.debug_mode) {
+			console.log("key pressed: "+currKey);
+			console.log("current input: "+codes.input);
+		}
+
 		for (var i=0; i<codes.code_list.length; i++) {
 			var test_str = codes.input;
 			if (test_str.length>codes.code_list[i].code.length) {
@@ -22,8 +28,7 @@ var codes = {
 			}
 			if (test_str == codes.code_list[i].code) {
 				codes.code_list[i].fn();
-				//clearTimeout(codes.timer);
-				return;
+				break;
 			}
 		}
 
@@ -34,11 +39,12 @@ var codes = {
 	function add_code
 	adds a push button code to the list
 	Parameters:
-		code:	the ascii numberic codes for the push button code (e.g. "38" is up, "97" is "a" and "97989799979898 is "abacabb"
+		code:	the ascii numberic codes for the push button code (e.g. "38" is up, "65" is "a" and "65666567656666 is "abacabb"
 		fn:		the function to be run when the code is entered, no paramaters are passed to the function
 	*/
 	add_code: function(code, fn) {
-		//window.status = code; // for debugging
+		if (this.debug_mode)
+			console.log("Code added: "+code);
 
 		codes.code_list.push( {code:code, fn:fn} );
 	},
@@ -49,7 +55,8 @@ var codes = {
 	Parameters: none
 	*/
 	clear_input: function() {
-		//window.status = "a"; // for debugging
+		if (this.debug_mode)
+			console.log("input cleared");
 
 		codes.input="";
 		clearTimeout(codes.timer);
