@@ -1,9 +1,5 @@
 # includes
 
-**make_thumbnails.php**  
-contains a function to create thumbnails from an existing image and save it in multiple file types  
-requires GD and Image functions for PHP
-
 **code.js**  
 when added to a webpage will allow the addition of push button codes to the page (like the Konami Code)  
 Notable codes to use:  
